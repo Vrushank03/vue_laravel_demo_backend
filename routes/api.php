@@ -21,6 +21,7 @@ use App\Http\Controllers\BlogController;
 // });
 
 Route::post('/user-login',[UserController::class, 'userlogin']);
+Route::post('/logout',[UserController::class, 'userlogout']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users', [UserController::class, 'getUser']);
@@ -31,4 +32,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/blogs', [BlogController::class, 'getBlogs']);
     Route::post('/create-blog', [BlogController::class, 'createBlog']);
+    Route::post('/update-blog', [BlogController::class, 'updateBlog']);
+
 });

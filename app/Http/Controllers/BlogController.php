@@ -9,17 +9,16 @@ use App\Models\category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\CreateBlogRequest;
+use App\Http\Requests\UpdateBlogRequest;
 
 class BlogController extends Controller
 {
     public function getBlogs(Request $request )
     {
 
-        $user = Auth::user()->user_id;
+        $user = Auth::user();
 
-        $userdata = User::where('user_id', $user)->first();
-
-        $blogsObj = Blog::where('user_id', $user)->with('category');
+        $blogsObj = Blog::where('user_id', $user->user_id)->with('category');
 
         $blogforcategoryId = $blogsObj->get();
 
@@ -33,7 +32,7 @@ class BlogController extends Controller
 
         $blogs = $blogsObj->get();
 
-        return response()->json(['blogs' => $blogs, 'user' => $userdata,'blogsCategories' => $userBlogsCategories]);
+        return response()->json(['blogs' => $blogs, 'user' => $user,'blogsCategories' => $userBlogsCategories]);
     }
 
     public function createBlog(CreateBlogRequest $request)
@@ -41,46 +40,53 @@ class BlogController extends Controller
 
         $data = $request->all();
 
-        $createBlog =  Blog::create([
-
-            'user_id'       => $data['user_id'],
-            'category_id'   => $data['category_id'],
-            'title'         => $data['title'],
-            'description'   => $data['description'],
-            'image'         => $data['image'],
-            'status'        => $data['status']
-
-        ]);
+        $createBlog =  Blog::create($data);
 
         return response()->json(['createBlog' => $createBlog, 'message' => 'success']);
 
     }
 
-    public function updateBlog(Request $request)
+    public function updateBlog(UpdateBlogRequest $request)
     {
 
         $data = $request->all();
 
-        $updateBlog = Blog::where('blog_id', $request->id)->update([
+        $blog = Blog::where('blog_id',$request->blog_id)->first();
 
-            'user_id'       => $data['user_id'],
-            'category_id'   => $data['category_id'],
-            'title'         => $data['title'],
-            'description'   => $data['description'],
-            'image'         => $data['image'],
-            'status'        => $data['status']
+        $message = null;
 
-        ]);
+        if(!empty($blog)){
 
-        return response()->json(['updateBlog' => $updateBlog, 'message' => 'success']);
+            $blog->update($data);
+            $blog = Blog::find($request->blog_id);
+            $message = 'Success';
+        }
+        else{
+            $message = 'Blog does not exit!!';
+        }
+
+        return response()->json(['updateBlog' => $blog, 'message' => $message ]);
     }
 
     public function deleteBlog($id)
     {
 
-        Blog::where('blog_id', $id)->delete();
+        $blog = Blog::where('blog_id',$id)->first();
 
-        return response()->json(['message' => 'success delete']);
+        $message = null;
+
+        if(!empty($blog)){
+
+            $blog->delete();
+            $message = 'Success';
+        }
+        else{
+
+            $message = 'Blog does not exit!!';
+
+        }
+
+        return response()->json(['message' => $message]);
 
     }
 }
