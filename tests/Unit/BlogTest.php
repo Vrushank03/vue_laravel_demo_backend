@@ -48,7 +48,7 @@ class BlogTest extends TestCase
             "title"         => $this->faker->text(200),
             "description"   => $this->faker->text(2000),
             "image"         =>$this->faker->url(),
-            "status"        => $this->faker->numberBetween(1,3)
+            "status"        => $this->faker->numberBetween(1,2)
 
         ]);
 
@@ -67,7 +67,7 @@ class BlogTest extends TestCase
             "title"         => $this->faker->text(200),
             "description"   => $this->faker->text(200),
             "image"         => $this->faker->url(),
-            "status"        => $this->faker->numberBetween(1,3)
+            "status"        => $this->faker->numberBetween(1,2)
 
         ]);
 
