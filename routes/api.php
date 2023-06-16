@@ -24,8 +24,8 @@ Route::post('/user-login',[UserController::class, 'userlogin']);
 Route::post('/logout',[UserController::class, 'userlogout']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/users', [UserController::class, 'getUser']);
     Route::post('/create-user', [UserController::class, 'createUser']);
+    Route::get('/users', [UserController::class, 'getUser']);
     Route::post('/update-user', [UserController::class, 'updateUser']);
     Route::get('/delete-user/{id}', [UserController::class, 'deleteUser']);
     Route::get('/user-data/{id}', [UserController::class, 'uniquedata']);
@@ -33,5 +33,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/blogs', [BlogController::class, 'getBlogs']);
     Route::post('/create-blog', [BlogController::class, 'createBlog']);
     Route::post('/update-blog', [BlogController::class, 'updateBlog']);
-
+    Route::post('/delete-blog/{id}',[BlogController::class , 'deleteBlog']);
 });
